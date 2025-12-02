@@ -1,0 +1,9 @@
+Summary for clustered N=1000
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 14.2409, 2.53811, 17.5958, 1.2522, 0
+Nearest, 3.28794, 0.527766, 16.6474, 1.30478, 0
+Cheapest, 2879.31, 238.889, 15.4108, 1.04626, 0
+Farthest, 947.363, 65.758, 14.175, 0.928366, 10
+MSTdouble, 4.99299, 0.294592, 17.5671, 1.14344, 0

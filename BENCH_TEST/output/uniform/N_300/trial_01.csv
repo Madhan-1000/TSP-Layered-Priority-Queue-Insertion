@@ -1,0 +1,6 @@
+algorithm,runtime_ms,length
+LPQI,6.66,14.1388
+Nearest,6.166,13.6162
+Cheapest,78.153,14.1392
+Farthest,27.811,13.9346
+MSTdouble,5.577,14.2425

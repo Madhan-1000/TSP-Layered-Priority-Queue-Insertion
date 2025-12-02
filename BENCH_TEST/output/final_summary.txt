@@ -1,0 +1,222 @@
+Benchmark summary (2-opt applied after each init). Trials=10 Seed=123456
+
+Summary for uniform N=10
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.0124, 0.00406065, 2.84301, 0.336196, 10
+Nearest, 0.0038, 0.00147573, 2.86543, 0.346589, 9
+Cheapest, 0.0074, 0.00107497, 2.85302, 0.321092, 9
+Farthest, 0.0064, 0.00107497, 2.84301, 0.336196, 10
+MSTdouble, 0.0083, 0.00211082, 2.87648, 0.354431, 8
+
+
+Summary for uniform N=20
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.0452, 0.0262458, 3.77183, 0.442009, 5
+Nearest, 0.0233, 0.00614727, 3.78112, 0.454881, 2
+Cheapest, 0.0592, 0.013563, 3.87541, 0.449783, 3
+Farthest, 0.0343, 0.0053965, 3.73921, 0.399307, 5
+MSTdouble, 0.0314, 0.00518973, 3.87959, 0.47941, 3
+
+
+Summary for uniform N=50
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.2952, 0.0755613, 6.13646, 0.188771, 3
+Nearest, 0.1832, 0.0368414, 6.16042, 0.201116, 1
+Cheapest, 1.1977, 1.57007, 6.34796, 0.142216, 0
+Farthest, 0.3378, 0.045487, 6.15079, 0.23158, 3
+MSTdouble, 0.2294, 0.033384, 6.21617, 0.208815, 3
+
+
+Summary for uniform N=100
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.6809, 0.144379, 8.28641, 0.310102, 0
+Nearest, 0.6007, 0.19424, 8.02824, 0.288012, 6
+Cheapest, 3.3801, 0.622868, 8.39368, 0.26957, 1
+Farthest, 1.4139, 0.236642, 8.14619, 0.221514, 3
+MSTdouble, 0.6358, 0.0653551, 8.43124, 0.248383, 0
+
+
+Summary for uniform N=200
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 2.5121, 0.492601, 11.715, 0.367208, 1
+Nearest, 2.1276, 0.356606, 11.5375, 0.29722, 2
+Cheapest, 23.3829, 1.35358, 11.9706, 0.314292, 0
+Farthest, 8.6669, 0.201626, 11.384, 0.254434, 7
+MSTdouble, 2.5567, 0.46551, 11.6882, 0.201975, 0
+
+
+Summary for uniform N=300
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 6.3973, 1.26408, 14.2652, 0.439446, 1
+Nearest, 5.2892, 0.64282, 13.8864, 0.402354, 5
+Cheapest, 76.2836, 1.62473, 14.3928, 0.362012, 0
+Farthest, 27.6741, 0.468686, 13.9917, 0.421789, 3
+MSTdouble, 5.2424, 0.771589, 14.2617, 0.354563, 1
+
+
+Summary for uniform N=500
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 17.6642, 2.11493, 18.5748, 0.251865, 0
+Nearest, 16.1795, 2.45609, 17.9136, 0.278217, 10
+Cheapest, 342.701, 4.77169, 18.7247, 0.2373, 0
+Farthest, 121.267, 1.80495, 18.1824, 0.255454, 0
+MSTdouble, 16.9512, 1.45282, 18.3578, 0.39749, 0
+
+
+Summary for uniform N=1000
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 76.657, 13.1146, 26.0831, 0.306123, 0
+Nearest, 63.0558, 9.90203, 25.1387, 0.264851, 7
+Cheapest, 2685.29, 38.0422, 26.1562, 0.307265, 0
+Farthest, 928.404, 15.1816, 25.4584, 0.400752, 3
+MSTdouble, 74.475, 5.17397, 25.6851, 0.241003, 0
+
+
+Summary for uniform N=1500
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 186.083, 24.5699, 31.7652, 0.40429, 0
+Nearest, 160.191, 23.4097, 30.3572, 0.268005, 10
+Cheapest, 8978.56, 32.0042, 32.0056, 0.160656, 0
+Farthest, 3065.57, 31.0508, 31.0358, 0.295071, 0
+MSTdouble, 164.753, 25.726, 31.3289, 0.289618, 0
+
+
+Summary for uniform N=2000
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 340.467, 32.4649, 36.6997, 0.188481, 0
+Nearest, 277.585, 38.077, 35.2037, 0.269081, 10
+Cheapest, 21636.5, 332.354, 36.9848, 0.363817, 0
+Farthest, 7283.67, 50.3858, 35.8891, 0.255304, 0
+MSTdouble, 304.215, 28.945, 36.2296, 0.300587, 0
+
+
+Summary for clustered N=10
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.012, 0.00278887, 1.29557, 0.683508, 8
+Nearest, 0.0052, 0.00181353, 1.29618, 0.683395, 8
+Cheapest, 0.0087, 0.000948683, 1.29705, 0.681815, 5
+Farthest, 0.0078, 0.00122927, 1.29418, 0.683313, 9
+MSTdouble, 0.0091, 0.00179196, 1.29598, 0.683585, 8
+
+
+Summary for clustered N=20
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.0336, 0.00427395, 1.29714, 0.595782, 4
+Nearest, 0.0267, 0.00676675, 1.29921, 0.590711, 3
+Cheapest, 0.0544, 0.0066366, 1.30764, 0.586941, 2
+Farthest, 0.0442, 0.0245438, 1.29581, 0.591609, 5
+MSTdouble, 0.0367, 0.00614727, 1.29862, 0.596109, 5
+
+
+Summary for clustered N=50
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.2445, 0.0524876, 1.76753, 0.449541, 7
+Nearest, 1.0127, 1.43573, 1.79918, 0.451871, 1
+Cheapest, 0.7158, 0.082416, 1.80444, 0.443303, 0
+Farthest, 0.3251, 0.0432626, 1.7821, 0.432905, 2
+MSTdouble, 0.2129, 0.0402477, 1.7931, 0.445078, 0
+
+
+Summary for clustered N=100
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.8231, 0.221301, 3.66299, 0.249147, 1
+Nearest, 0.6691, 0.181804, 3.65632, 0.26498, 3
+Cheapest, 3.8537, 0.634827, 3.70625, 0.260257, 1
+Farthest, 1.7386, 0.486256, 3.60178, 0.264723, 3
+MSTdouble, 0.7106, 0.250836, 3.66087, 0.252887, 2
+
+
+Summary for clustered N=200
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 3.102, 0.483964, 5.28019, 0.331144, 2
+Nearest, 2.9541, 0.750103, 5.2768, 0.37223, 1
+Cheapest, 25.3964, 1.42777, 5.4316, 0.399405, 0
+Farthest, 9.5077, 1.19289, 5.20186, 0.377613, 6
+MSTdouble, 2.4881, 0.460598, 5.395, 0.396787, 1
+
+
+Summary for clustered N=300
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 8.5157, 1.96968, 6.32006, 0.376968, 1
+Nearest, 6.0667, 1.37204, 6.24473, 0.382166, 3
+Cheapest, 78.5798, 3.49198, 6.5071, 0.350215, 0
+Farthest, 27.7641, 0.713191, 6.22451, 0.335413, 5
+MSTdouble, 5.5122, 0.889115, 6.48844, 0.430532, 1
+
+
+Summary for clustered N=500
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 21.2745, 4.03694, 7.80101, 0.411719, 1
+Nearest, 17.0122, 4.6353, 7.7306, 0.333978, 2
+Cheapest, 361.584, 23.4584, 7.94156, 0.354274, 0
+Farthest, 135.936, 20.7524, 7.61098, 0.343475, 7
+MSTdouble, 17.9588, 4.27873, 7.85174, 0.338494, 0
+
+
+Summary for clustered N=1000
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 79.7077, 10.008, 10.3288, 0.491793, 0
+Nearest, 75.687, 22.4937, 10.1045, 0.487776, 5
+Cheapest, 2702.37, 34.1181, 10.4101, 0.513023, 0
+Farthest, 936.029, 22.4979, 10.0757, 0.462762, 5
+MSTdouble, 73.9151, 10.6691, 10.2959, 0.579718, 0
+
+
+Summary for clustered N=1500
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 186.763, 12.8424, 12.5416, 0.530973, 0
+Nearest, 183.1, 22.5834, 12.2074, 0.51618, 5
+Cheapest, 9100.35, 101.019, 12.7923, 0.579037, 0
+Farthest, 3110.48, 63.707, 12.2001, 0.511962, 5
+MSTdouble, 168.409, 16.3712, 12.4662, 0.561147, 0
+
+
+Summary for clustered N=2000
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 390.926, 55.804, 14.0066, 0.71328, 0
+Nearest, 288.896, 25.4292, 13.552, 0.678733, 8
+Cheapest, 22321.2, 1203.61, 14.1311, 0.809808, 0
+Farthest, 7439.56, 233.239, 13.6368, 0.742791, 2
+MSTdouble, 295.525, 51.7322, 13.8823, 0.861926, 0
+
+

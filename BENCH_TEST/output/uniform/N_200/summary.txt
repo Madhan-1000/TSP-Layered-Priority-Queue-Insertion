@@ -1,0 +1,9 @@
+Summary for uniform N=200
+Trials: 10
+
+Algorithm, mean_runtime_ms, std_runtime_ms, mean_length, std_length, wins
+LPQI, 0.77124, 0.128283, 13.3867, 0.321673, 0
+Nearest, 0.163501, 0.0413512, 13.4012, 0.385505, 0
+Cheapest, 23.2915, 1.43982, 12.7247, 0.298509, 0
+Farthest, 7.85173, 0.424894, 11.5196, 0.262974, 10
+MSTdouble, 0.269678, 0.0201548, 14.7826, 0.454907, 0
