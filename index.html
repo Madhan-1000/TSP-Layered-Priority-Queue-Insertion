@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Layered Priority-Queue Insertion (LPQI) - TSP</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050910;
+      --panel: #0d1626;
+      --muted: #9fb0c8;
+      --text: #eaf0ff;
+      --accent: #6ae3ff;
+      --accent-2: #7cffb2;
+      --border: rgba(255,255,255,0.08);
+      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --radius: 16px;
+      --speed: 240ms;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(110,227,255,0.08), transparent 32%),
+                  radial-gradient(circle at 80% 0%, rgba(124,255,178,0.08), transparent 30%),
+                  radial-gradient(circle at 50% 80%, rgba(106,227,255,0.05), transparent 26%),
+                  var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 32px clamp(16px, 4vw, 48px) 64px;
+      line-height: 1.6;
+    }
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      animation: fadeIn var(--speed) ease-out;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 46px);
+      letter-spacing: -0.5px;
+    }
+    .tag {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      font-weight: 500;
+      background: rgba(255,255,255,0.02);
+    }
+    .lead {
+      max-width: 900px;
+      color: var(--muted);
+      margin: 12px 0 24px;
+      font-size: 17px;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    a.btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration: none;
+      background: linear-gradient(135deg, rgba(106,227,255,0.14), rgba(124,255,178,0.12));
+      backdrop-filter: blur(4px);
+      transition: transform var(--speed) ease, box-shadow var(--speed) ease, border-color var(--speed) ease;
+      box-shadow: var(--shadow);
+    }
+    a.btn.secondary {
+      background: rgba(255,255,255,0.04);
+      box-shadow: none;
+    }
+    a.btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(255,255,255,0.22);
+      box-shadow: 0 20px 45px rgba(106,227,255,0.12);
+    }
+    section {
+      margin-top: 36px;
+      animation: fadeInUp var(--speed) ease-out;
+    }
+    h2 {
+      margin: 0 0 12px;
+      font-size: 24px;
+    }
+    .panel {
+      background: linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      box-shadow: var(--shadow);
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    @media (min-width: 900px) {
+      .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    .stat {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.02);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .stat::after {
+      content: "";
+      position: absolute;
+      inset: -30% -30%;
+      background: radial-gradient(circle, rgba(106,227,255,0.12), transparent 55%);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity var(--speed) ease, transform var(--speed) ease;
+      z-index: 0;
+    }
+    .stat:hover::after { opacity: 1; transform: translateY(0); }
+    .stat span.label { color: var(--muted); font-size: 13px; letter-spacing: 0.4px; text-transform: uppercase; }
+    .stat strong { font-size: 24px; letter-spacing: -0.2px; }
+    .muted { color: var(--muted); }
+    ul { padding-left: 18px; margin: 8px 0 0; color: var(--muted); }
+    li { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    thead { position: sticky; top: 0; background: #0b1320; }
+    th, td {
+      text-align: left;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    th { color: var(--muted); font-weight: 600; letter-spacing: 0.3px; }
+    tbody tr { transition: background var(--speed) ease, transform var(--speed) ease; }
+    tbody tr:hover { background: rgba(106,227,255,0.05); transform: translateY(-1px); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.04);
+    }
+    .accent { color: var(--accent); }
+    .accent-2 { color: var(--accent-2); }
+    .pill { padding: 6px 10px; background: rgba(124,255,178,0.12); color: var(--text); border-radius: 999px; border: 1px solid var(--border); }
+    .flex { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+    .scroll-area { max-height: 520px; overflow: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+    .small { font-size: 13px; color: var(--muted); }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <header>
+    <span class="tag">Euclidean TSP · LPQI</span>
+    <h1>Layered Priority-Queue Insertion</h1>
+  </header>
+  <div class="lead">A geometric-topological heuristic for the Euclidean Traveling Salesman Problem. LPQI layers convex hulls and uses lazy priority queues to insert interior points quickly, yielding strong starter tours for local search (2-opt/3-opt/LK-light).</div>
+  <div class="actions">
+    <a class="btn" href="https://github.com/Madhan-1000/TSP-Layered-Priority-Queue-Insertion" target="_blank" rel="noopener">View Repository</a>
+    <a class="btn secondary" href="https://www.researchgate.net/publication/398242295_Layered_Priority-Queue_Insertion_A_Geometric_and_Topological_Heuristic_for_the_Euclidean_Traveling_Salesman_Problem" target="_blank" rel="noopener">Read the paper</a>
+  </div>
+
+  <section class="grid cols-3">
+    <div class="stat">
+      <span class="label">Key idea</span>
+      <strong>Convex layers + lazy PQ</strong>
+      <div class="muted">Start on the hull, insert interior points via distance-to-segment priority queue with lazy revalidation.</div>
+    </div>
+    <div class="stat">
+      <span class="label">Local search</span>
+      <strong>2-opt · 3-opt · LK-light</strong>
+      <div class="muted">Clean starter tours feed lightweight refinements for fast, high-quality results.</div>
+    </div>
+    <div class="stat">
+      <span class="label">Dataset</span>
+      <strong>TSPLIB (Tnm52–Tnm199)</strong>
+      <div class="muted">Concorde optima provided for 48 planar instances with recorded runtimes.</div>
+    </div>
+  </section>
+
+  <section class="grid cols-2">
+    <div class="panel">
+      <h2>Algorithm snapshot</h2>
+      <ul>
+        <li>Compute convex hull; initialize tour with hull vertices.</li>
+        <li>Maintain priority queue keyed by point-to-edge insertion cost; lazily refresh on pop.</li>
+        <li>Insert at cheapest edge; repeat until all interior points are placed.</li>
+        <li>Polish with 2-opt, safe 3-opt (n ≤ 150), and a short LK-style edge-flip sampler.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>What to look for</h2>
+      <ul>
+        <li>Subquadratic practical behavior on Euclidean inputs.</li>
+        <li>Competitive initial tours versus classic insertions; strong feedstock for local search.</li>
+        <li>Minimal hyperparameters; deterministic runs except for LK-light sampling.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Benchmark rollup</h2>
+    <div class="grid cols-3" id="rollup-cards"></div>
+  </section>
+
+  <section>
+    <div class="flex" style="justify-content: space-between; align-items: baseline;">
+      <h2>Instance-by-instance view</h2>
+      <span class="small">Uses results_stable/bench.csv merged with Concorde optima.</span>
+    </div>
+    <div class="scroll-area">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Instance</th>
+            <th>n</th>
+            <th>Optimum</th>
+            <th>Best LPQI family length</th>
+            <th>% over optimum</th>
+            <th>Best variant</th>
+            <th>Init time (s)</th>
+            <th>LK-light (s)</th>
+            <th>Concorde runtime (s)</th>
+            <th>Integrality gap</th>
+          </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="grid cols-2">
+    <div class="panel">
+      <h2>Data sources</h2>
+      <ul>
+        <li>TSPLIB95 Concorde solutions and coordinates (see /TSPLIB95/CONCORODE_solved_instances).</li>
+        <li>Recorded algorithm runs: results_stable/bench.csv (LPQI, MHLPQI, HullRot).</li>
+        <li>Full timing and multi-stage outputs: results/concorde_full_bench.csv.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h2>Notes</h2>
+      <ul>
+        <li>Concorde integrality gaps and runtimes are shown for context; LPQI results are purely constructive with light post-processing.</li>
+        <li>3-opt is applied only when n ≤ 150 to stay lean on larger instances.</li>
+        <li>Percent over optimum is computed from the best LPQI-family length vs the provided Concorde optimum.</li>
+      </ul>
+    </div>
+  </section>
+
+  <script>
+    const concordeMeta = {
+      "Tnm52.tsp": { n: 52, optimum: 551609, gap: 1.1207, runtime: 12 },
+      "Tnm55.tsp": { n: 55, optimum: 605778, gap: 1.1265, runtime: 17 },
+      "Tnm58.tsp": { n: 58, optimum: 660687, gap: 1.1313, runtime: 21 },
+      "Tnm61.tsp": { n: 61, optimum: 716131, gap: 1.135, runtime: 30 },
+      "Tnm64.tsp": { n: 64, optimum: 770162, gap: 1.1383, runtime: 33 },
+      "Tnm67.tsp": { n: 67, optimum: 825328, gap: 1.142, runtime: 47 },
+      "Tnm70.tsp": { n: 70, optimum: 881036, gap: 1.1453, runtime: 68 },
+      "Tnm73.tsp": { n: 73, optimum: 893843, gap: 1.1587, runtime: 84 },
+      "Tnm76.tsp": { n: 76, optimum: 949961, gap: 1.1619, runtime: 103 },
+      "Tnm79.tsp": { n: 79, optimum: 1006535, gap: 1.1648, runtime: 152 },
+      "Tnm82.tsp": { n: 82, optimum: 1062686, gap: 1.1665, runtime: 190 },
+      "Tnm85.tsp": { n: 85, optimum: 1117381, gap: 1.1663, runtime: 164 },
+      "Tnm88.tsp": { n: 88, optimum: 1172734, gap: 1.1673, runtime: 196 },
+      "Tnm91.tsp": { n: 91, optimum: 1228726, gap: 1.1697, runtime: 275 },
+      "Tnm94.tsp": { n: 94, optimum: 1285416, gap: 1.1724, runtime: 397 },
+      "Tnm97.tsp": { n: 97, optimum: 1342086, gap: 1.1747, runtime: 566 },
+      "Tnm100.tsp": { n: 100, optimum: 1398070, gap: 1.1762, runtime: 664 },
+      "Tnm103.tsp": { n: 103, optimum: 1412229, gap: 1.1845, runtime: 478 },
+      "Tnm106.tsp": { n: 106, optimum: 1469617, gap: 1.1867, runtime: 761 },
+      "Tnm109.tsp": { n: 109, optimum: 1527709, gap: 1.1893, runtime: 1068 },
+      "Tnm112.tsp": { n: 112, optimum: 1585157, gap: 1.1911, runtime: 1721 },
+      "Tnm115.tsp": { n: 115, optimum: 1641752, gap: 1.1921, runtime: 1523 },
+      "Tnm118.tsp": { n: 118, optimum: 1698486, gap: 1.1931, runtime: 2261 },
+      "Tnm121.tsp": { n: 121, optimum: 1755689, gap: 1.1943, runtime: 2329 },
+      "Tnm124.tsp": { n: 124, optimum: 1813276, gap: 1.1957, runtime: 3082 },
+      "Tnm127.tsp": { n: 127, optimum: 1871162, gap: 1.1971, runtime: 3787 },
+      "Tnm130.tsp": { n: 130, optimum: 1928734, gap: 1.1982, runtime: 4332 },
+      "Tnm133.tsp": { n: 133, optimum: 1944317, gap: 1.2059, runtime: 6254 },
+      "Tnm136.tsp": { n: 136, optimum: 2002445, gap: 1.207, runtime: 6912 },
+      "Tnm139.tsp": { n: 139, optimum: 2060637, gap: 1.2082, runtime: 9347 },
+      "Tnm142.tsp": { n: 142, optimum: 2118758, gap: 1.2092, runtime: 9980 },
+      "Tnm145.tsp": { n: 145, optimum: 2177169, gap: 1.2102, runtime: 12990 },
+      "Tnm148.tsp": { n: 148, optimum: 2235669, gap: 1.2113, runtime: 18144 },
+      "Tnm151.tsp": { n: 151, optimum: 2293265, gap: 1.2124, runtime: 18866 },
+      "Tnm154.tsp": { n: 154, optimum: 2350345, gap: 1.2132, runtime: 24972 },
+      "Tnm157.tsp": { n: 157, optimum: 2407153, gap: 1.2137, runtime: 29190 },
+      "Tnm160.tsp": { n: 160, optimum: 2463857, gap: 1.2141, runtime: 34022 },
+      "Tnm163.tsp": { n: 163, optimum: 2485463, gap: 1.2214, runtime: 56671 },
+      "Tnm166.tsp": { n: 166, optimum: 2543466, gap: 1.2223, runtime: 53752 },
+      "Tnm169.tsp": { n: 169, optimum: 2600546, gap: 1.2227, runtime: 72038 },
+      "Tnm172.tsp": { n: 172, optimum: 2657369, gap: 1.2229, runtime: 61625 },
+      "Tnm175.tsp": { n: 175, optimum: 2714530, gap: 1.2233, runtime: 80703 },
+      "Tnm178.tsp": { n: 178, optimum: 2771953, gap: 1.2237, runtime: 110158 },
+      "Tnm181.tsp": { n: 181, optimum: 2829701, gap: 1.2242, runtime: 117373 },
+      "Tnm184.tsp": { n: 184, optimum: 2887675, gap: 1.2248, runtime: 191357 },
+      "Tnm187.tsp": { n: 187, optimum: 2945939, gap: 1.2255, runtime: 249657 },
+      "Tnm190.tsp": { n: 190, optimum: 3004259, gap: 1.2261, runtime: 337307 },
+      "Tnm193.tsp": { n: 193, optimum: 3023551, gap: 1.2316, runtime: 263334 },
+      "Tnm196.tsp": { n: 196, optimum: 3081566, gap: 1.232, runtime: 300945 },
+      "Tnm199.tsp": { n: 199, optimum: 3139778, gap: 1.2325, runtime: 411222 }
+    };
+
+    const tableBody = document.getElementById('table-body');
+    const rollup = document.getElementById('rollup-cards');
+
+    function formatNumber(x) {
+      if (x === null || x === undefined || Number.isNaN(x)) return '–';
+      return x.toLocaleString('en-US');
+    }
+
+    function formatPct(x) {
+      if (x === null || x === undefined || Number.isNaN(x)) return '–';
+      return `${x.toFixed(2)}%`;
+    }
+
+    function buildRollups(entries) {
+      const pctValues = entries.filter(e => e.pctOver !== null).map(e => e.pctOver);
+      const avg = pctValues.length ? pctValues.reduce((a,b)=>a+b,0)/pctValues.length : null;
+      const best = entries.length ? entries.reduce((a,b)=> (a && a.pctOver <= b.pctOver ? a : b), null) : null;
+      const fastest = entries.length ? entries.reduce((a,b)=> (a && a.initTime <= b.initTime ? a : b), null) : null;
+
+      const cards = [
+        { label: 'Avg. % over optimum', value: avg !== null ? formatPct(avg) : '–', note: 'Across all instances with known optima.' },
+        { label: 'Closest instance', value: best ? `${best.instance} (${formatPct(best.pctOver)})` : '–', note: best ? `Best variant: ${best.variant}` : '' },
+        { label: 'Fastest init', value: fastest ? `${fastest.instance} (${fastest.variant})` : '–', note: fastest ? `${fastest.initTime.toFixed(3)} s init` : '' }
+      ];
+
+      rollup.innerHTML = cards.map(c => `
+        <div class="stat">
+          <span class="label">${c.label}</span>
+          <strong>${c.value}</strong>
+          <div class="muted">${c.note}</div>
+        </div>
+      `).join('');
+    }
+
+    function render(entries) {
+      entries.sort((a,b)=>a.n-b.n);
+      tableBody.innerHTML = entries.map((row, idx) => `
+        <tr style="animation: fadeInUp 280ms ease ${idx*6}ms forwards; opacity:0;">
+          <td>${idx+1}</td>
+          <td>${row.instance}</td>
+          <td>${row.n ?? '–'}</td>
+          <td>${formatNumber(row.optimum)}</td>
+          <td>${formatNumber(row.bestLen)}</td>
+          <td><span class="badge">${formatPct(row.pctOver)}</span></td>
+          <td>${row.variant ?? '–'}</td>
+          <td>${row.initTime !== null ? row.initTime.toFixed(3) : '–'}</td>
+          <td>${row.lkTime !== null ? row.lkTime.toFixed(3) : '–'}</td>
+          <td>${row.concordeRuntime ? formatNumber(row.concordeRuntime) : '–'}</td>
+          <td>${row.integralityGap ?? '–'}</td>
+        </tr>
+      `).join('');
+      buildRollups(entries);
+    }
+
+    function parseBench(csvText) {
+      const lines = csvText.trim().split(/\r?\n/);
+      const entries = {};
+      for (let i = 1; i < lines.length; i++) {
+        const cells = lines[i].split(',');
+        if (cells.length < 7) continue;
+        const inst = cells[0];
+        const n = parseInt(cells[1], 10);
+        const alg = cells[2];
+        const len = parseFloat(cells[3]);
+        const init_t = parseFloat(cells[5]);
+        const lk_t = parseFloat(cells[6]);
+        if (!entries[inst] || len < entries[inst].bestLen) {
+          entries[inst] = { instance: inst, n, variant: alg, bestLen: len, initTime: init_t, lkTime: lk_t };
+        }
+      }
+      return Object.values(entries);
+    }
+
+    fetch('results_stable/bench.csv')
+      .then(r => r.text())
+      .then(text => {
+        const bestPerInst = parseBench(text);
+        const merged = bestPerInst.map(row => {
+          const meta = concordeMeta[row.instance] || {};
+          const optimum = meta.optimum ?? null;
+          const pctOver = optimum ? ((row.bestLen - optimum) / optimum) * 100 : null;
+          return {
+            ...row,
+            optimum,
+            pctOver,
+            concordeRuntime: meta.runtime ?? null,
+            integralityGap: meta.gap ?? null
+          };
+        });
+        render(merged);
+      })
+      .catch(() => {
+        tableBody.innerHTML = '<tr><td colspan="11">Could not load results_stable/bench.csv.</td></tr>';
+      });
+  </script>
+</body>
+</html>
